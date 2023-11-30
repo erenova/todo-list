@@ -1,6 +1,12 @@
 import "./main.css";
 import "./modules/category";
 import "./modules/task";
-import * as category from "./modules/category";
+import * as categoryModule from "./modules/category";
+import * as taskModule from "./modules/task";
 
-window.global = { category };
+function developmentHelper(item, naming) {
+  window[`${naming}`] = item;
+}
+
+developmentHelper(categoryModule, "Category");
+developmentHelper(taskModule, "Task");

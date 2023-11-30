@@ -1,5 +1,16 @@
 import BaseEntity from "./baseEntity";
 
+const categorySettings = {
+  activeCategory: {
+    hashID: undefined,
+    index: undefined,
+    title: undefined,
+    description: undefined,
+    tasks: undefined,
+  },
+  allCategories: [],
+};
+
 class Category extends BaseEntity {
   constructor(title, description) {
     super(title, description);
@@ -11,64 +22,93 @@ class Category extends BaseEntity {
   }
 }
 
-const categorySettings = {
-  activeCategory: { hashID: undefined, index: undefined },
-  allCategories: [],
-  getCategoryCount() {
-    return this.allCategories.length;
-  },
-  getActiveCategory() {
-    return this.activeCategory;
-  },
-  getAllCategories() {
-    return this.allCategories;
-  },
-};
-
 function createNewCategory(title, description) {
-  /* Single responsibility principle */
+  /* SRP */
   return new Category(title, description);
 }
 
-function resetIndexForCategories() {
+function addNewCategory(title, description) {
+  /* SRP */
+  let newCategory = createNewCategory(title, description);
+  categorySettings.allCategories.push(newCategory);
+  /* Track latest added category */
+  resetIndex(categorySettings.allCategories);
+  setActiveCategoryByReference(newCategory);
+}
+
+function resetIndex(arrayList) {
   /* For tracking categories */
   let categoryIndex = 0;
-  categorySettings.allCategories.forEach((item) => {
+  arrayList.forEach((item) => {
     item.index = categoryIndex;
     categoryIndex++;
   });
 }
 
-function addNewCategory(title, description) {
-  /* Single responsibility principle */
-  let newCategory = createNewCategory(title, description);
-  categorySettings.allCategories.push(newCategory);
-  /* Track latest added category */
-  resetIndexForCategories();
-  setActiveCategory(newCategory);
+function setActiveCategoryByReference(NewactiveCategoryValues) {
+  categorySettings.activeCategory = NewactiveCategoryValues;
 }
 
-function setActiveCategory(activeCategoryValues) {
-  categorySettings.activeCategory.hashID = activeCategoryValues.hash;
-  categorySettings.activeCategory.index = activeCategoryValues.index;
-}
-
-function deleteCategory(itemIndex) {
-  if (itemIndex === getCategoryCount()) {
+function setActiveCategoryByIndex(NewactiveCategoryValues) {
+  if (NewactiveCategoryValues < getCategoryCountAsIndex()) {
+    categorySettings.activeCategory =
+      getAllCategories()[NewactiveCategoryValues];
+  } else {
+    categorySettings.activeCategory =
+      getAllCategories()[getCategoryCountAsIndex()];
   }
-  categorySettings.allCategories.splice(itemIndex, 1);
-  resetIndexForCategories();
+}
+
+function deleteCategory() {
+  let activeItemIndex = getActiveCategory("index");
+  categorySettings.allCategories.splice(activeItemIndex, 1);
+  /* If Categories sum is not zero */
+  if (getCategoryCount() >= 1) {
+    /* Then, if available, active Item can be previous item  */
+    if (activeItemIndex - 1 !== -1) {
+      setActiveCategoryByIndex(activeItemIndex - 1);
+    } else {
+      /* if not, set it as 0 */
+      setActiveCategoryByIndex(0);
+    }
+  } else {
+    /*
+    TODO! Create an example category function with example tasks in it, (future task) */
+    addNewCategory();
+    setActiveCategoryByIndex(0);
+  }
+
+  resetIndex(categorySettings.allCategories);
 }
 
 function getCategoryCount() {
   return categorySettings.allCategories.length;
 }
-
-function getActiveCategory() {
-  return categorySettings.activeCategory;
+function getCategoryCountAsIndex() {
+  return categorySettings.allCategories.length - 1;
 }
 
-function getAllCategories() {}
+function getActiveTasks() {
+  return getActiveCategory()["tasks"];
+}
+
+function getActiveCategory(spec) {
+  if (spec !== undefined) {
+    return categorySettings.activeCategory[spec];
+  } else {
+    return categorySettings.activeCategory;
+  }
+}
+
+function getAllCategories() {
+  return categorySettings.allCategories;
+}
+
+addNewCategory("chchch", "arararara");
+addNewCategory("tytyty", "yak");
+addNewCategory("vyvy", "");
+addNewCategory("xdasdf", "hahaha");
+addNewCategory();
 
 export {
   categorySettings,
@@ -76,4 +116,8 @@ export {
   deleteCategory,
   getActiveCategory,
   getAllCategories,
+  setActiveCategoryByIndex,
+  setActiveCategoryByReference,
+  getActiveTasks,
+  resetIndex,
 };
