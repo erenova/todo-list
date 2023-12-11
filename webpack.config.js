@@ -15,10 +15,13 @@ const config = {
   output: {
     path: path.resolve(__dirname, "dist"),
   },
-  watch: true,
+  optimization: {
+    usedExports: true,
+  },
   devServer: {
     hot: true,
     open: true,
+    liveReload: false,
     host: "localhost",
   },
   watchOptions: {
