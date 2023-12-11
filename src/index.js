@@ -8,5 +8,5 @@ function developmentHelper(item, naming) {
   window[`${naming}`] = item;
 }
 
-developmentHelper(categoryModule, "Category");
-developmentHelper(taskModule, "Task");
+developmentHelper(categoryModule, "category");
+developmentHelper(taskModule, "task");
