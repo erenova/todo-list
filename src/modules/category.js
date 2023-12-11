@@ -1,7 +1,7 @@
 import BaseEntity from "./baseEntity";
 import compareAsc from "date-fns/compareAsc";
 import compareDesc from "date-fns/compareDesc";
-import { format } from "./task";
+import { PriorityLevels, format } from "./task";
 import { get } from "lodash";
 class Category extends BaseEntity {
   constructor(title, description) {
@@ -33,8 +33,8 @@ function saveToLocalStorage(item, numberValue) {
     case `latestIndex`:
       localStorage.setItem(`latestIndex`, numberValue);
       break;
-    case `lastFilter`:
-      localStorage.setItem(`filterSetting`, recentUsedFilter);
+    case `recentFilter`:
+      localStorage.setItem(`recentFilter`, recentUsedFilter);
 
       break;
   }
@@ -77,7 +77,7 @@ function openLatestPage() {
 
 /* ^^-- LocalStorage --^^ */
 
-/* vv--- Filtering ---vv */
+//! vv--- Filtering ---vv */
 
 let recentUsedFilter = getFilterOnLoad();
 window.addEventListener("DOMContentLoaded", () => {
@@ -113,6 +113,7 @@ function useFilter(filterName = "nameFilter", isSame) {
 let reverseOrderTitle = true;
 function toggleNameFilterTask(isSame) {
   recentUsedFilter = "nameFilter";
+  saveToLocalStorage("recentFilter");
   if (isSame === true) {
     if (!reverseOrderTitle) {
       getActiveTasks().sort((itemA, itemB) => {
@@ -158,6 +159,8 @@ function toggleNameFilterTask(isSame) {
 let reverseOrderDate = false;
 function toggleDateFilterTask(isSame) {
   recentUsedFilter = "dateFilter";
+  saveToLocalStorage("recentFilter");
+
   if (isSame) {
     if (!reverseOrderDate) {
       getActiveTasks().sort((itemA, itemB) => {
@@ -194,11 +197,43 @@ function toggleDateFilterTask(isSame) {
     }
   }
 }
+let reverseOrderPriority = false;
 function togglePriorityFilterTask() {
   recentUsedFilter = "priorityFilter";
+  saveToLocalStorage("recentFilter");
+  let finalList = [];
+  let highList = [];
+  let medList = [];
+  let lowList = [];
+  let copyActiveTasks = [...getActiveTasks()];
+  copyActiveTasks.forEach((item) => {
+    switch (item.priority) {
+      /* HIGH */
+      case PriorityLevels[0]:
+        highList.push(item);
+        break;
+      /* MED */
+      case PriorityLevels[1]:
+        medList.push(item);
+        break;
+      /* LOW */
+      case PriorityLevels[2]:
+        lowList.push(item);
+        break;
+    }
+  });
+  finalList = [...highList, ...medList, ...lowList];
+  if (reverseOrderPriority) {
+    finalList.reverse();
+    reverseOrderPriority = false;
+  } else {
+    reverseOrderPriority = true;
+  }
+  categorySettings.activeCategory.tasks = finalList;
+  return getActiveTasks();
 }
 
-/* ^^--- Filtering ---^^ */
+//! ^^--- Filtering ---^^ */
 
 function createNewCategory(title, description) {
   /* SRP */
@@ -306,8 +341,8 @@ export {
   resetIndex,
   saveToLocalStorage,
   toggleNameFilterTask,
-  compareAsc,
-  compareDesc,
+  toggleDateFilterTask,
+  togglePriorityFilterTask,
   useFilter,
   useActiveFilter,
 };

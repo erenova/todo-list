@@ -33,7 +33,7 @@ class Task extends BaseEntity {
   }
 }
 
-const PriorityLevels = ["HIGH", "MED", "LOW"];
+export const PriorityLevels = ["HIGH", "MED", "LOW"];
 
 let fetchActiveTaskList = categoryModule.getActiveTasks;
 
