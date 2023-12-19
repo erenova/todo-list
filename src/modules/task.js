@@ -47,6 +47,7 @@ function addNewTask(
   priority = "MED"
 ) {
   dueDate = new Date(dueDate);
+  priority = priority.toUpperCase();
   if (isValid(dueDate) && PriorityLevels.includes(priority)) {
     dueDate = format(dueDate, `yyyy-MM-dd`);
     fetchActiveTaskList().push(
@@ -73,4 +74,4 @@ function deleteTask(index) {
   categoryModule.saveToLocalStorage("categoryList");
 }
 
-export { addNewTask, deleteTask, isValid, format };
+export { addNewTask, deleteTask };

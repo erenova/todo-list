@@ -1,16 +1,13 @@
 import BaseEntity from "./baseEntity";
 import compareAsc from "date-fns/compareAsc";
-import compareDesc from "date-fns/compareDesc";
-import { PriorityLevels, format } from "./task";
-import { get } from "lodash";
+import { PriorityLevels } from "./task";
+import { v4 as uuidv4 } from "uuid";
+
 class Category extends BaseEntity {
   constructor(title, description) {
     super(title, description);
     this.tasks = [];
-    this.hash = crypto.randomUUID();
-  }
-  clearTasks() {
-    this.tasks = [];
+    this.hash = uuidv4();
   }
 }
 
@@ -55,7 +52,7 @@ function decideCategoryState() {
           title: "Example Category",
           description: "Category Description",
           tasks: [],
-          hash: crypto.randomUUID(),
+          hash: uuidv4(),
           index: 0,
         },
       ],
@@ -235,6 +232,7 @@ function togglePriorityFilterTask() {
 
 //! ^^--- Filtering ---^^ */
 
+/* VV--- ADD ---VVV */
 function createNewCategory(title, description) {
   /* SRP */
   return new Category(title, description);
@@ -254,7 +252,7 @@ function addNewCategory(
   saveToLocalStorage("categoryList");
 }
 
-function resetIndex(arrayList) {
+function resetIndex(arrayList, isDomArray) {
   /* For tracking categories */
   let categoryIndex = 0;
   arrayList.forEach((item) => {
@@ -281,6 +279,7 @@ function setActiveCategoryByIndex(NewactiveCategoryValues) {
   saveToLocalStorage("categoryList");
 }
 
+/* VV--- REMOVE ---VV */
 function deleteCategory() {
   let activeItemIndex = getActiveCategory("index");
   categorySettings.allCategories.splice(activeItemIndex, 1);
@@ -301,6 +300,21 @@ function deleteCategory() {
   resetIndex(categorySettings.allCategories);
   saveToLocalStorage("categoryList");
 }
+
+function deleteAllActiveTasks() {
+  categorySettings.activeCategory.tasks = [];
+}
+
+function deleteAllCategories() {
+  categorySettings.allCategories = [
+    createNewCategory("Example Category", "Description"),
+  ];
+  resetIndex(categorySettings.allCategories);
+
+  saveToLocalStorage("categoryList");
+}
+
+/* ^^--- REMOVE ---^^ */
 
 function getCategoryCount() {
   return categorySettings.allCategories.length;
@@ -345,4 +359,6 @@ export {
   togglePriorityFilterTask,
   useFilter,
   useActiveFilter,
+  deleteAllActiveTasks,
+  deleteAllCategories,
 };
