@@ -230,6 +230,20 @@ function togglePriorityFilterTask() {
   return getActiveTasks();
 }
 
+function getActiveFilterName() {
+  return `${recentUsedFilter}`;
+}
+
+function isFilterDescending(filterName) {
+  let filterObjects = {
+    nameFilter: reverseOrderTitle,
+    dateFilter: reverseOrderDate,
+    priorityFilter: reverseOrderPriority,
+  };
+
+  return { isDescending: filterObjects[filterName], filterName };
+}
+
 //! ^^--- Filtering ---^^ */
 
 /* VV--- ADD ---VVV */
@@ -361,4 +375,6 @@ export {
   useActiveFilter,
   deleteAllActiveTasks,
   deleteAllCategories,
+  getActiveFilterName,
+  isFilterDescending,
 };
