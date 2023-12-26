@@ -1,10 +1,5 @@
 import { updateAssetURLs } from "./assetManagement";
-import {
-  categorySettings,
-  getActiveFilterName,
-  isFilterDescending,
-  useFilter,
-} from "./category";
+import { getActiveFilterName, isFilterDescending, useFilter } from "./category";
 
 function resetActiveFilterStatus() {
   document.querySelectorAll(`[data-status]`).forEach((item) => {
@@ -102,10 +97,53 @@ function updateActiveFilterImageOnLoad() {
   updateAssetURLs();
 }
 
+/* Modal Open-Close */
+//close
+function closeActiveModal() {
+  let allModalElements = document.querySelectorAll("[data-modalstatus]");
+  allModalElements.forEach((modalItem) => {
+    modalItem.classList.add("hidden");
+  });
+}
+//open clearAll
+
+function openModal() {
+  let allModalElements = document.querySelectorAll("[data-modalstatus]");
+  allModalElements.forEach((modalItem) => {
+    modalItem.classList.remove("hidden");
+    modalItem.classList.add("flex");
+  });
+}
+
 /* vvv Document Event listener section vvv */
 document
   .querySelector(`#filterList`)
   .addEventListener("click", handleClickEventOnFilter);
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll("img").forEach((img) => {
+    img.addEventListener("contextmenu", (event) => event.preventDefault());
+    img.addEventListener("pointerdown", (event) => event.preventDefault());
+  });
+});
+
+// clear all task button click
+document
+  .querySelector('[data-buttonEvent="clearAllTasks"]')
+  .addEventListener("click", openModal);
+
+// clear modal on backdrop click
+document.querySelector("#backdrop").addEventListener("click", closeActiveModal);
+
+// clear all task modal, on click to cancel
+document
+  .querySelector('[data-buttonEvent="deleteAllTasks"]')
+  .addEventListener("click", closeActiveModal);
+
+// clear all task modal, on click to cancel
+document
+  .querySelector('[data-buttonEvent="cancelModal"]')
+  .addEventListener("click", closeActiveModal);
 
 export {
   resetActiveFilterStatus,
