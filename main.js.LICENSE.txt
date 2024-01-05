@@ -1,3 +1,5 @@
 //! ^^--- Filtering ---^^ */
 
+//! clear all task modal, on click to Delete anyway
+
 //! vv--- Filtering ---vv */
