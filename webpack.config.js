@@ -3,7 +3,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const isProduction = process.env.NODE_ENV == "production";
 
 const stylesHandler = isProduction
@@ -19,10 +19,8 @@ const config = {
     usedExports: true,
   },
   devServer: {
+    static: "dist",
     hot: true,
-    open: true,
-    liveReload: false,
-    host: "localhost",
   },
   watchOptions: {
     ignored: /node_modules/,
@@ -81,6 +79,11 @@ const config = {
 module.exports = () => {
   if (isProduction) {
     config.mode = "production";
+
+    config.optimization = {
+      minimize: true,
+      minimizer: [`...`, new CssMinimizerPlugin()],
+    };
 
     config.plugins.push(new MiniCssExtractPlugin());
   } else {
