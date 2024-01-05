@@ -1,5 +1,19 @@
+import { el } from "date-fns/locale";
 import { updateAssetURLs } from "./assetManagement";
-import { getActiveFilterName, isFilterDescending, useFilter } from "./category";
+import {
+  deleteAllActiveTasks,
+  deleteCategory,
+  getActiveFilterName,
+  isFilterDescending,
+  useFilter,
+} from "./category";
+import {
+  addEditInput,
+  addNewInput,
+  removeFormElement,
+  updateUIForCategories,
+  updateUIForTasks,
+} from "./dynamicUI";
 
 function resetActiveFilterStatus() {
   document.querySelectorAll(`[data-status]`).forEach((item) => {
@@ -98,21 +112,75 @@ function updateActiveFilterImageOnLoad() {
 }
 
 /* Modal Open-Close */
-//close
-function closeActiveModal() {
-  let allModalElements = document.querySelectorAll("[data-modalstatus]");
-  allModalElements.forEach((modalItem) => {
-    modalItem.classList.add("hidden");
-  });
-}
-//open clearAll
 
-function openModal() {
-  let allModalElements = document.querySelectorAll("[data-modalstatus]");
-  allModalElements.forEach((modalItem) => {
-    modalItem.classList.remove("hidden");
-    modalItem.classList.add("flex");
-  });
+//open modal & category & backdrop
+
+function openModalTab() {
+  let modalTab = document.querySelector("#delete-item");
+  modalTab.classList.add("flex");
+  modalTab.classList.remove("hidden");
+}
+function openBackdrop() {
+  let darkTab = document.querySelector("#backdrop");
+  darkTab.classList.add("flex");
+  darkTab.classList.remove("hidden");
+}
+
+function openCategoryTab() {
+  document.querySelector("#category-tab").classList.remove("-translate-x-full");
+}
+
+function openAllModalElements() {
+  openModalTab();
+  openBackdrop();
+}
+
+function openAllCategoryElements(isDesktop) {
+  let categoryTab = document.querySelector("#category-tab").classList;
+  /* If clicked element is desktop button   */
+  if (isDesktop.target.dataset.buttonmobile === undefined) {
+    if (categoryTab.contains("-translate-x-full")) {
+      openCategoryTab();
+    } else {
+      closeCategoryTab();
+    }
+  } else {
+    openCategoryTab();
+    openBackdrop();
+  }
+}
+
+//close modal and backdrop
+
+function closeModalTab() {
+  let modalTab = document.querySelector("#delete-item");
+  modalTab.classList.remove("flex");
+  modalTab.classList.add("hidden");
+}
+
+function closeBackdrop() {
+  let darkTab = document.querySelector("#backdrop");
+  darkTab.classList.remove("flex");
+  darkTab.classList.add("hidden");
+}
+
+function closeCategoryTab() {
+  document.querySelector("#category-tab").classList.add("-translate-x-full");
+}
+
+function closeAllModalElements() {
+  closeModalTab();
+  closeBackdrop();
+  closeCategoryTab();
+}
+/* add-delete category */
+function deleteActiveCategoryDOM() {
+  if (document.querySelector("form")) {
+    removeFormElement();
+  } else {
+    deleteCategory();
+  }
+  updateUIForCategories();
 }
 
 /* vvv Document Event listener section vvv */
@@ -127,23 +195,54 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+// clear modal on backdrop click
+document
+  .querySelector("#backdrop")
+  .addEventListener("click", closeAllModalElements);
+
 // clear all task button click
 document
-  .querySelector('[data-buttonEvent="clearAllTasks"]')
-  .addEventListener("click", openModal);
+  .querySelectorAll('[data-buttonEvent="clearAllTasks"]')
+  .forEach((buttonElem) => {
+    buttonElem.addEventListener("click", openAllModalElements);
+  });
 
-// clear modal on backdrop click
-document.querySelector("#backdrop").addEventListener("click", closeActiveModal);
-
-// clear all task modal, on click to cancel
+//! clear all task modal, on click to Delete anyway
 document
   .querySelector('[data-buttonEvent="deleteAllTasks"]')
-  .addEventListener("click", closeActiveModal);
+  .addEventListener("click", () => {
+    closeAllModalElements();
+    deleteAllActiveTasks();
+    updateUIForTasks();
+  });
 
 // clear all task modal, on click to cancel
 document
   .querySelector('[data-buttonEvent="cancelModal"]')
-  .addEventListener("click", closeActiveModal);
+  .addEventListener("click", closeAllModalElements);
+
+/* open close category tab */
+document
+  .querySelectorAll('[data-buttonEvent="openAllCategoryElements"]')
+  .forEach((item) => {
+    item.addEventListener("click", openAllCategoryElements);
+  });
+
+/* add-delete category */
+document
+  .querySelector('[data-buttonEvent="addNewCategory"]')
+  .addEventListener("click", addNewInput);
+
+/* Edit */
+document
+  .querySelector('[data-buttonEvent="editCategoryName"]')
+  .addEventListener("click", addEditInput);
+/* Delete */
+document
+  .querySelector('[data-buttonEvent="deleteActiveCategory"]')
+  .addEventListener("click", deleteActiveCategoryDOM);
+
+/* SwitchCategory on click */
 
 export {
   resetActiveFilterStatus,
@@ -152,4 +251,5 @@ export {
   resetImages,
   updateActiveFilterImage,
   updateActiveFilterImageOnLoad,
+  openCategoryTab,
 };

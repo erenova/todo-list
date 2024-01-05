@@ -4,8 +4,8 @@ import { PriorityLevels } from "./task";
 import { v4 as uuidv4 } from "uuid";
 
 class Category extends BaseEntity {
-  constructor(title, description) {
-    super(title, description);
+  constructor(title) {
+    super(title);
     this.tasks = [];
     this.hash = uuidv4();
   }
@@ -16,7 +16,6 @@ categorySettings.activeCategory = {
   hashID: undefined,
   index: undefined,
   title: undefined,
-  description: undefined,
   tasks: undefined,
 };
 /* vv-- LocalStorage --vv */
@@ -44,13 +43,11 @@ function decideCategoryState() {
         hashID: undefined,
         index: undefined,
         title: undefined,
-        description: undefined,
         tasks: undefined,
       },
       allCategories: [
         {
           title: "Example Category",
-          description: "Category Description",
           tasks: [],
           hash: uuidv4(),
           index: 0,
@@ -247,17 +244,14 @@ function isFilterDescending(filterName) {
 //! ^^--- Filtering ---^^ */
 
 /* VV--- ADD ---VVV */
-function createNewCategory(title, description) {
+function createNewCategory(title) {
   /* SRP */
-  return new Category(title, description);
+  return new Category(title);
 }
 
-function addNewCategory(
-  title = "Category Name",
-  description = "Category Description"
-) {
+function addNewCategory(title = "Category Name") {
   /* SRP */
-  let newCategory = createNewCategory(title, description);
+  let newCategory = createNewCategory(title);
   categorySettings.allCategories.push(newCategory);
   /* Track latest added category */
   resetIndex(categorySettings.allCategories);
@@ -292,6 +286,12 @@ function setActiveCategoryByIndex(NewactiveCategoryValues) {
   }
   saveToLocalStorage("categoryList");
 }
+function setActiveCategoryByHash(hashID) {
+  const categoryByHash = getCategoryByHash(hashID);
+  categorySettings.activeCategory = categoryByHash;
+  saveToLocalStorage(`latestIndex`, categoryByHash.index);
+  saveToLocalStorage("categoryList");
+}
 
 /* VV--- REMOVE ---VV */
 function deleteCategory() {
@@ -320,15 +320,15 @@ function deleteAllActiveTasks() {
 }
 
 function deleteAllCategories() {
-  categorySettings.allCategories = [
-    createNewCategory("Example Category", "Description"),
-  ];
+  categorySettings.allCategories = [createNewCategory("Example Category")];
   resetIndex(categorySettings.allCategories);
 
   saveToLocalStorage("categoryList");
 }
 
 /* ^^--- REMOVE ---^^ */
+
+/* Get-Find */
 
 function getCategoryCount() {
   return categorySettings.allCategories.length;
@@ -346,6 +346,19 @@ function getActiveCategory(spec) {
     return categorySettings.activeCategory[spec];
   } else {
     return categorySettings.activeCategory;
+  }
+}
+
+function getCategoryByHash(hashID) {
+  const foundCategory = categorySettings.allCategories.find((item) => {
+    return item.hash === hashID;
+  });
+
+  if (foundCategory) {
+    return foundCategory;
+  } else {
+    console.warn("Böyle bir kategori bulunamadı.");
+    return false;
   }
 }
 
@@ -377,4 +390,6 @@ export {
   deleteAllCategories,
   getActiveFilterName,
   isFilterDescending,
+  getCategoryByHash,
+  setActiveCategoryByHash,
 };

@@ -3,10 +3,17 @@ import * as categoryModule from "./category";
 import isValid from "date-fns/isValid";
 import format from "date-fns/format";
 class Task extends BaseEntity {
-  constructor(title = "title", description = "description", dueDate, priority) {
+  constructor(
+    title = "title",
+    description = "description",
+    dueDate,
+    priority,
+    isDone
+  ) {
     super(title, description);
     this.dueDate = dueDate;
     this.priority = priority;
+    this.isDone = isDone;
   }
 
   editDueDate(newDueDate) {
@@ -37,21 +44,26 @@ export const PriorityLevels = ["HIGH", "MED", "LOW"];
 
 let fetchActiveTaskList = categoryModule.getActiveTasks;
 
-function createNewTask(title, description, dueDate, priority) {
-  return new Task(title, description, dueDate, priority);
+function createNewTask(title, description, dueDate, priority, isDone) {
+  return new Task(title, description, dueDate, priority, isDone);
 }
 function addNewTask(
   title,
   description,
   dueDate = new Date(),
-  priority = "MED"
+  priority = "MED",
+  isDone = false
 ) {
   dueDate = new Date(dueDate);
   priority = priority.toUpperCase();
-  if (isValid(dueDate) && PriorityLevels.includes(priority)) {
+  if (
+    isValid(dueDate) &&
+    PriorityLevels.includes(priority) &&
+    (isDone === false || isDone === true)
+  ) {
     dueDate = format(dueDate, `yyyy-MM-dd`);
     fetchActiveTaskList().push(
-      createNewTask(title, description, dueDate, priority)
+      createNewTask(title, description, dueDate, priority, isDone)
     );
     categoryModule.useActiveFilter(true);
     categoryModule.saveToLocalStorage("categoryList");

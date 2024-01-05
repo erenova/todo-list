@@ -2,11 +2,19 @@
 <html class="h-full">
 
 <head>
+    <style>
+        html {
+            visibility: hidden;
+            opacity: 0;
+        }
+    </style>
+
     <meta name="google" content="notranslate">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Todo List</title>
 </head>
+
 
 <body class="select-none m-0 p-0 h-full min-h-full flex flex-col flex-1 bg-no-repeat"
     style="background-size: 100% 100%;">
@@ -16,57 +24,97 @@
     </div>
     <main class="relative w-full top-[50%] left-[50%] -translate-x-2/4 -translate-y-3/4 flex justify-center md:mt-5">
         <div
-            class="bg-blue-100 w-[100%] h-[400px] sm:h-[500px] md:h-[600px] md:w-[700px] xl:w-[900px] 2xl:w-[1000px] bg-opacity-80 p-3 sm:p-4 md:p-6 lg:p-8">
-            <button data-buttonEvent=""
-                class="hidden lg:flex lg:flex-col md:items-center absolute top-[50%] -translate-x-[145%] ">
-                <img data-dynamicURL="category.svg" class="select-none w-8 md:w-12 hover:scale-110">
-                Categories
+            class="relative bg-blue-100 w-[100%] h-[400px] sm:h-[500px] md:h-[600px] md:w-[700px] xl:w-[900px] 2xl:w-[1000px] bg-opacity-80 p-3 sm:p-4 md:p-8">
+            <button data-buttonEvent="openAllCategoryElements"
+                class="hidden lg:flex  md:items-center absolute left-0 -translate-x-full h-[112px] transition-width duration-300 ease-in-out origin-right desktop-expand-button  w-[30px] hover:w-[140px] bg-white hover:bg-gray-100 rounded-l-lg">
+                <img data-dynamicURL="category.svg" class="select-none w-8 md:w-12 pointer-events-none">
+                <span
+                    class="opacity-0 group-hover:opacity-100 whitespace-nowrap overflow-hidden pointer-events-none">Categories</span>
             </button>
 
-            <div id="title-bar" class="border-b border-b-black">
-                <ul id="filterList" class="flex flex-row text-xl justify-around select-none ">
-                    <li data-filterevent="nameFilter" class="hover:cursor-pointer flex items-center gap-2 xl:gap-8">
-                        <span class="flex flex-col items-center">
-                            <span class="md:text-2xl 2xl:text-3xl">Name</span>
-                            <span class="text-sm" data-status="passive"></span>
-                        </span>
-                        <img data-dynamicURL="nameNormal.svg" class="select-none w-8 md:w-12 hover:scale-110">
-                    </li>
-                    <!-- second Li  (vvv) hidden in mobile view, there will be a feature as "click and show" -->
-                    <li data-filterevent="none" class="hidden md:flex md:items-center md:gap-2 xl:gap-8">
-                        <span class="flex flex-col items-center">
-                            <span class="md:text-2xl 2xl:text-3xl">Description</span>
-                            <span class="text-sm" data-status="passive"></span>
-                        </span>
-                        <img data-dynamicURL="descriptionNormal.svg" class="select-none w-8 md:w-12">
-                    </li>
-                    <li data-filterevent="dateFilter" class="hover:cursor-pointer flex items-center gap-2 xl:gap-8">
-                        <span class="flex flex-col items-center">
-                            <span class="md:text-2xl 2xl:text-3xl">Date</span>
-                            <span class="text-sm" data-status="passive"></span>
-                        </span>
-                        <img data-dynamicURL="dateNormal.svg" class="select-none w-8 md:w-12 hover:scale-110">
-                    </li>
-                    <li data-filterevent="priorityFilter" class="hover:cursor-pointer flex items-center gap-2 xl:gap-8">
-                        <span class="flex flex-col items-center">
-                            <span class="md:text-2xl 2xl:text-3xl">Priority</span>
-                            <span class="text-sm" data-status="passive"></span>
-                        </span>
-                        <img data-dynamicURL="priorityNormal.svg" class="select-none w-8 md:w-12 hover:scale-110">
-                    </li>
-                </ul>
+            <div class="absolute right-0 translate-x-full flex flex-col gap-3">
+                <button data-buttonEvent="addNewTask"
+                    class="hidden lg:flex  md:items-center transition-width duration-300 ease-in-out origin-left desktop-expand-button h-[50px] w-[30px] hover:w-[140px] bg-white hover:bg-gray-100 rounded-r-lg">
+                    <img data-dynamicURL="plus-box.svg" class="w-6 h-6">
+                    <span class="ml-2 text-sm opacity-0 group-hover:opacity-100 whitespace-nowrap overflow-hidden">
+                        Add New Task</span>
+                </button>
+                <button data-buttonEvent="clearAllTasks"
+                    class="hidden lg:flex  md:items-center transition-width duration-300 ease-in-out origin-left desktop-expand-button h-[50px] w-[30px] hover:w-[140px] bg-white hover:bg-gray-100 rounded-r-lg">
+                    <img data-dynamicURL="delete.svg" class="w-6 h-6">
+                    <span class="ml-2 text-sm opacity-0 group-hover:opacity-100 whitespace-nowrap overflow-hidden">Clear
+                        All Tasks</span>
+                </button>
+
+
+            </div>
+            <div class="flex flex-col gap-8 relative">
+
+                <!-- Filter Bar Section --> <!-- Filter Bar Section -->
+                <div id="filter-bar" class="border-b border-b-black">
+                    <ul id="filterList" class="flex flex-row text-xl justify-around select-none ">
+                        <li data-filterevent="nameFilter" class="hover:cursor-pointer flex items-center gap-2 xl:gap-8">
+                            <span class="flex flex-col items-center">
+                                <span class="md:text-2xl 2xl:text-3xl">Name</span>
+                                <span class="text-sm" data-status="passive"></span>
+                            </span>
+                            <img data-dynamicURL="nameNormal.svg" class="select-none w-8 md:w-12 hover:scale-110">
+                        </li>
+                        <!-- second Li  (vvv) hidden in mobile view, there will be a feature as "click and show" -->
+                        <li data-filterevent="none" class="hidden md:flex md:items-center md:gap-2 xl:gap-8">
+                            <span class="flex flex-col items-center">
+                                <span class="md:text-2xl 2xl:text-3xl">Description</span>
+                                <span class="text-sm" data-status="passive"></span>
+                            </span>
+                            <img data-dynamicURL="descriptionNormal.svg" class="select-none w-8 md:w-12">
+                        </li>
+                        <li data-filterevent="dateFilter" class="hover:cursor-pointer flex items-center gap-2 xl:gap-8">
+                            <span class="flex flex-col items-center">
+                                <span class="md:text-2xl 2xl:text-3xl">Date</span>
+                                <span class="text-sm" data-status="passive"></span>
+                            </span>
+                            <img data-dynamicURL="dateNormal.svg" class="select-none w-8 md:w-12 hover:scale-110">
+                        </li>
+                        <li data-filterevent="priorityFilter"
+                            class="hover:cursor-pointer flex items-center gap-2 xl:gap-8">
+                            <span class="flex flex-col items-center">
+                                <span class="md:text-2xl 2xl:text-3xl">Priority</span>
+                                <span class="text-sm" data-status="passive"></span>
+                            </span>
+                            <img data-dynamicURL="priorityNormal.svg" class="select-none w-8 md:w-12 hover:scale-110">
+                        </li>
+                    </ul>
+                </div>
+                <!-- Task List Section -->
+                <div id="task-list"
+                    class="p-2 flex flex-col gap-3 max-h-[307px] sm:max-h-[402px] md:max-h-[478px] overflow-auto">
+                    <div class="task bg-gray-400 text-white h-8 flex items-center p-5 rounded-lg">done</div>
+                    <div class="task bg-slate-700 text-white h-8 flex items-center p-5 rounded-lg">a</div>
+                    <div class="task bg-slate-700 text-white h-8 flex items-center p-5 rounded-lg">A</div>
+                    <div class="task bg-slate-700 text-white h-8 flex items-center p-5 rounded-lg">A</div>
+                    <div class="task bg-slate-700 text-white h-8 flex items-center p-5 rounded-lg">A</div>
+                    <div class="task bg-slate-700 text-white h-8 flex items-center p-5 rounded-lg">A</div>
+                    <div class="task bg-slate-700 text-white h-8 flex items-center p-5 rounded-lg">A</div>
+                    <div class="task bg-slate-700 text-white h-8 flex items-center p-5 rounded-lg">A</div>
+                    <div class="task bg-orange-300 text-white h-8 flex items-center p-5 rounded-lg">A</div>
+                    <div class="task bg-green-400 text-white h-8 flex items-center p-5 rounded-lg">A</div>
+                    <div class="task bg-gray-700 text-white h-8 flex items-center p-5 rounded-lg">A</div>
+                </div>
             </div>
         </div>
-
     </main>
     <!-- Mobile navbar -->
     <div id="navbar-mobile"
-        class="lg:hidden absolute bottom-0 bg-blue-100 w-full h-16 flex justify-center items-center gap-8">
-        <button data-buttonEvent=""
-            class="border border-green-500 bg-green-200 focus:bg-green-400 active:bg-green-200 rounded-md h-12 p-3 flex justify-center items-center">
+        class="lg:hidden absolute bottom-0 bg-blue-100 w-full h-16 flex justify-center items-center gap-2 p-2 ">
+        <button data-buttonEvent="openAllCategoryElements" data-buttonmobile="mobile"
+            class="border border-green-500 bg-green-200 focus:bg-green-400 active:bg-green-200 rounded-md h-full p-3 flex justify-center items-center">
             Go To Categories</button>
+        <button data-buttonEvent="addNewTask"
+            class="border border-green-500 bg-green-200 focus:bg-green-400 active:bg-green-200 rounded-md h-full p-3 flex flex-col justify-center items-center">
+
+            <span>Add new Task</span></button>
         <button data-buttonEvent="clearAllTasks"
-            class="border border-green-500 bg-green-200 focus:bg-green-400 active:bg-green-200  rounded-md h-12 p-3 flex justify-center items-center">
+            class="border border-green-500 bg-green-200 focus:bg-green-400 active:bg-green-200  rounded-md h-full p-3 flex justify-center items-center">
             Clear All Tasks</button>
     </div>
 
@@ -91,6 +139,30 @@
     </div>
 
     <!-- Category tab -->
+    <div id="category-tab"
+        class="-translate-x-full absolute top-2/4 -translate-y-36 w-2/4 sm:w-48 h-[350px] bg-blue-100 transition-transform  z-50 flex flex-col items-center gap-6 rounded-r-xl">
+
+        <p class="underline text-center text-2xl mt-5">Categories</p>
+        <div id="category-holder"
+            class="flex flex-col text-center w-full p-3 text-lg h-[200px] overflow-y-scroll gap-1">
+
+        </div>
+        <div class="mt-auto mb-5 gap-8 w-full flex items-center justify-center p-3">
+            <button data-buttonEvent="addNewCategory"
+                class="bg-white hover:bg-gray-100 rounded-sm w-full flex items-center justify-center">
+                <img data-dynamicURL="plus-box.svg" class="h-8 pointer-events-none">
+            </button>
+            <button data-buttonEvent="editCategoryName"
+                class="bg-white hover:bg-gray-100 rounded-sm w-full flex items-center justify-center">
+                <img data-dynamicURL="editButton.svg" class="h-8 pointer-events-none">
+            </button>
+            <button data-buttonEvent="deleteActiveCategory"
+                class="bg-white hover:bg-gray-100 rounded-sm w-full flex items-center justify-center">
+                <img data-dynamicURL="delete.svg" class="h-8 pointer-events-none">
+            </button>
+        </div>
+    </div>
+
 
 
 </body>
