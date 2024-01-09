@@ -4,13 +4,13 @@
   "description": "My webpack project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode=production --node-env=production",
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
     "start": "webpack serve --mode=development --open",
-    "dev": "webpack serve --open --config webpack.config.js"
+    "dev": "webpack serve --open --config webpack.config.js",
+    "live": "git subtree push --prefix dist origin gh-pages"
   },
   "keywords": [],
   "author": "",
