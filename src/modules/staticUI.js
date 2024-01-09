@@ -94,7 +94,7 @@ function updateActiveFilterImage(imgItem) {
 
 function updateActiveFilterImageOnLoad() {
   let imageItem = document
-    .querySelector(`[data-filterevent="${category.getActiveFilterName()}"]`)
+    .querySelector(`[data-filterevent="${getActiveFilterName()}"]`)
     .querySelector("img");
   if (getActiveFilterName() === "nameFilter") {
     imageItem.dataset.dynamicurl = imageItem.dataset.dynamicurl.replace(
