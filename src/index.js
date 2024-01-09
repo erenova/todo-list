@@ -3,32 +3,14 @@ import "./modules/category";
 import "./modules/task";
 import "./modules/dynamicUI";
 import "./modules/keyboardEvents";
-import * as UIelements from "./modules/staticUI";
-import * as categoryModule from "./modules/category";
-import * as taskModule from "./modules/task";
 import backgroundPhoto from "./imgs/todo-background.png";
-import { updateAssetURLs } from "./modules/assetManagement";
-import {
-  scrollToActiveCategory,
-  updateUIForCategories,
-} from "./modules/dynamicUI";
 
 document.body.style.backgroundImage = `url(${backgroundPhoto})`;
-function developmentHelper(item, naming) {
-  window[`${naming}`] = item;
-}
+
 /* Final DOM Listeners */
 window.addEventListener("load", () => {
   document.querySelector("html").style.visibility = "visible";
   document.querySelector("html").style.opacity = "1";
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  updateUIForCategories();
-  UIelements.setFiltersDOMrequirements();
-  updateAssetURLs();
-  UIelements.updateActiveFilterImageOnLoad();
-  scrollToActiveCategory();
 });
 
 /* Touch zoom in feature disabled */
@@ -61,7 +43,3 @@ window.addEventListener(
   },
   { passive: false }
 );
-
-developmentHelper(categoryModule, "category");
-developmentHelper(taskModule, "task");
-developmentHelper(UIelements, "UIelements");
