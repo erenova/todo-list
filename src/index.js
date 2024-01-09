@@ -4,8 +4,6 @@ import "./modules/task";
 import "./modules/dynamicUI";
 import "./modules/keyboardEvents";
 import * as UIelements from "./modules/staticUI";
-import * as categoryModule from "./modules/category";
-import * as taskModule from "./modules/task";
 import backgroundPhoto from "./imgs/todo-background.png";
 import { updateAssetURLs } from "./modules/assetManagement";
 import {
