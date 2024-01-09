@@ -33,11 +33,18 @@
             </button>
 
             <div class="absolute right-0 translate-x-full flex flex-col gap-3">
-                <button data-buttonEvent="addNewTask"
+                <button data-buttonEvent="ClickOnAddNewTask"
                     class="hidden lg:flex  md:items-center transition-width duration-300 ease-in-out origin-left desktop-expand-button h-[50px] w-[30px] hover:w-[140px] bg-white hover:bg-gray-100 rounded-r-lg">
                     <img data-dynamicURL="plus-box.svg" class="w-6 h-6">
                     <span class="ml-2 text-sm opacity-0 group-hover:opacity-100 whitespace-nowrap overflow-hidden">
                         Add New Task</span>
+                </button>
+                <button data-buttonEvent="deleteCheckedboxes"
+                    class="hidden lg:flex  md:items-center transition-width duration-300 ease-in-out origin-left desktop-expand-button h-[50px] w-[30px] hover:w-[190px] bg-white hover:bg-gray-100 rounded-r-lg">
+                    <img data-dynamicURL="done.svg" class="w-6 h-6">
+                    <span
+                        class="ml-2 text-sm opacity-0 group-hover:opacity-100 whitespace-nowrap overflow-hidden">Delete
+                        Completed Tasks</span>
                 </button>
                 <button data-buttonEvent="clearAllTasks"
                     class="hidden lg:flex  md:items-center transition-width duration-300 ease-in-out origin-left desktop-expand-button h-[50px] w-[30px] hover:w-[140px] bg-white hover:bg-gray-100 rounded-r-lg">
@@ -52,67 +59,78 @@
 
                 <!-- Filter Bar Section --> <!-- Filter Bar Section -->
                 <div id="filter-bar" class="border-b border-b-black">
-                    <ul id="filterList" class="flex flex-row text-xl justify-around select-none ">
-                        <li data-filterevent="nameFilter" class="hover:cursor-pointer flex items-center gap-2 xl:gap-8">
+                    <ul id="filterList" class="grid grid-cols-3 md:grid-cols-4 place-items-center place-content-center">
+                        <li data-filterevent="nameFilter" class="flex items-center gap-4">
                             <span class="flex flex-col items-center">
                                 <span class="md:text-2xl 2xl:text-3xl">Name</span>
                                 <span class="text-sm" data-status="passive"></span>
                             </span>
-                            <img data-dynamicURL="nameNormal.svg" class="select-none w-8 md:w-12 hover:scale-110">
+                            <img data-dynamicURL="nameNormal.svg" class="select-none w-8 md:w-10">
                         </li>
                         <!-- second Li  (vvv) hidden in mobile view, there will be a feature as "click and show" -->
-                        <li data-filterevent="none" class="hidden md:flex md:items-center md:gap-2 xl:gap-8">
+                        <li data-filterevent="none" class="hidden md:flex items-center gap-4">
                             <span class="flex flex-col items-center">
                                 <span class="md:text-2xl 2xl:text-3xl">Description</span>
                                 <span class="text-sm" data-status="passive"></span>
                             </span>
-                            <img data-dynamicURL="descriptionNormal.svg" class="select-none w-8 md:w-12">
+
                         </li>
-                        <li data-filterevent="dateFilter" class="hover:cursor-pointer flex items-center gap-2 xl:gap-8">
+                        <li data-filterevent="dateFilter" class="flex items-center gap-4">
                             <span class="flex flex-col items-center">
                                 <span class="md:text-2xl 2xl:text-3xl">Date</span>
                                 <span class="text-sm" data-status="passive"></span>
                             </span>
-                            <img data-dynamicURL="dateNormal.svg" class="select-none w-8 md:w-12 hover:scale-110">
+                            <img data-dynamicURL="dateNormal.svg" class="select-none w-8 md:w-10 ">
                         </li>
-                        <li data-filterevent="priorityFilter"
-                            class="hover:cursor-pointer flex items-center gap-2 xl:gap-8">
+                        <li data-filterevent="priorityFilter" class="flex items-center gap-4">
                             <span class="flex flex-col items-center">
                                 <span class="md:text-2xl 2xl:text-3xl">Priority</span>
                                 <span class="text-sm" data-status="passive"></span>
                             </span>
-                            <img data-dynamicURL="priorityNormal.svg" class="select-none w-8 md:w-12 hover:scale-110">
+                            <img data-dynamicURL="priorityNormal.svg" class="select-none w-8 md:w-10">
                         </li>
                     </ul>
                 </div>
                 <!-- Task List Section -->
                 <div id="task-list"
-                    class="p-2 flex flex-col gap-3 max-h-[307px] sm:max-h-[402px] md:max-h-[478px] overflow-auto">
-                    <div class="task bg-gray-400 text-white h-8 flex items-center p-5 rounded-lg">done</div>
-                    <div class="task bg-slate-700 text-white h-8 flex items-center p-5 rounded-lg">a</div>
-                    <div class="task bg-slate-700 text-white h-8 flex items-center p-5 rounded-lg">A</div>
-                    <div class="task bg-slate-700 text-white h-8 flex items-center p-5 rounded-lg">A</div>
-                    <div class="task bg-slate-700 text-white h-8 flex items-center p-5 rounded-lg">A</div>
-                    <div class="task bg-slate-700 text-white h-8 flex items-center p-5 rounded-lg">A</div>
-                    <div class="task bg-slate-700 text-white h-8 flex items-center p-5 rounded-lg">A</div>
-                    <div class="task bg-slate-700 text-white h-8 flex items-center p-5 rounded-lg">A</div>
-                    <div class="task bg-orange-300 text-white h-8 flex items-center p-5 rounded-lg">A</div>
-                    <div class="task bg-green-400 text-white h-8 flex items-center p-5 rounded-lg">A</div>
-                    <div class="task bg-gray-700 text-white h-8 flex items-center p-5 rounded-lg">A</div>
+                    class="p-1 flex flex-col gap-3 max-h-[307px] sm:max-h-[402px] md:max-h-[478px] overflow-auto">
+                    <div data-priority="" data-taskstatus="todo"
+                        class="task rounded-lg bg-gray-400 text-white min-h-[1rem] max-h-[4rem] pt-1 pb-1 pr-5 grid grid-cols-3 md:grid-cols-4 place-items-center place-content-center  border">
+                        <div
+                            class="break-words max-h-[2.95rem] overflow-y-auto max-w-[6rem] md:max-w-[7rem] lg:max-w-[8rem] xl:max-w-[9rem] 2xl:max-w-[10rem] place-self-center">
+                            nameahashashashashashash
+                        </div>
+                        <div
+                            class="hidden md:block break-words max-h-[2.95rem] overflow-y-auto overflow-x-hidden md:max-w-[7rem] lg:max-w-[8rem] xl:max-w-[9rem] 2xl:max-w-[10rem]">
+                            Description
+                        </div>
+                        <div>
+                            01/25/2024
+                        </div>
+                        <div class="flex items-center relative">
+                            <span>MED</span>
+                            <input
+                                class="w-5 h-5 absolute translate-x-[280%] sm:translate-x-[350%] md:translate-x-[400%] xl:translate-x-[500%]"
+                                type="checkbox">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
     <!-- Mobile navbar -->
     <div id="navbar-mobile"
-        class="lg:hidden absolute bottom-0 bg-blue-100 w-full h-16 flex justify-center items-center gap-2 p-2 ">
+        class="lg:hidden absolute bottom-0 bg-blue-100 w-full h-24 flex justify-center items-center gap-2 p-2 ">
         <button data-buttonEvent="openAllCategoryElements" data-buttonmobile="mobile"
             class="border border-green-500 bg-green-200 focus:bg-green-400 active:bg-green-200 rounded-md h-full p-3 flex justify-center items-center">
             Go To Categories</button>
-        <button data-buttonEvent="addNewTask"
+        <button data-buttonEvent="ClickOnAddNewTask"
             class="border border-green-500 bg-green-200 focus:bg-green-400 active:bg-green-200 rounded-md h-full p-3 flex flex-col justify-center items-center">
 
             <span>Add new Task</span></button>
+        <button data-buttonEvent="deleteCheckedboxes"
+            class="border border-green-500 bg-green-200 focus:bg-green-400 active:bg-green-200  rounded-md h-full p-3 flex justify-center items-center">
+            Delete Completed Tasks</button>
         <button data-buttonEvent="clearAllTasks"
             class="border border-green-500 bg-green-200 focus:bg-green-400 active:bg-green-200  rounded-md h-full p-3 flex justify-center items-center">
             Clear All Tasks</button>

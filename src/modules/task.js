@@ -14,6 +14,7 @@ class Task extends BaseEntity {
     this.dueDate = dueDate;
     this.priority = priority;
     this.isDone = isDone;
+    this.uniqueID = categoryModule.uuidv4();
   }
 
   editDueDate(newDueDate) {
@@ -67,8 +68,9 @@ function addNewTask(
     );
     categoryModule.useActiveFilter(true);
     categoryModule.saveToLocalStorage("categoryList");
+    return true;
   } else {
-    console.warn("not Valid");
+    return false;
   }
 }
 
@@ -86,4 +88,28 @@ function deleteTask(index) {
   categoryModule.saveToLocalStorage("categoryList");
 }
 
-export { addNewTask, deleteTask };
+function getTaskWithHash(hashID) {
+  const foundTask = fetchActiveTaskList().find((item) => {
+    return item.uniqueID === hashID;
+  });
+  if (foundTask) {
+    return foundTask;
+  } else {
+    return false;
+  }
+}
+
+function deleteTaskWithHash(hashID) {
+  getTaskWithHash(hashID);
+}
+function getIndexWithHash(HashID) {
+  let index = 0;
+  const foundTask = fetchActiveTaskList().find((item) => {
+    index++;
+    if (item.uniqueID === hashID) {
+      return index;
+    }
+  });
+  return index - 1;
+}
+export { addNewTask, deleteTask, getTaskWithHash };

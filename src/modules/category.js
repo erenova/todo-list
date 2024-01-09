@@ -2,7 +2,6 @@ import BaseEntity from "./baseEntity";
 import compareAsc from "date-fns/compareAsc";
 import { PriorityLevels } from "./task";
 import { v4 as uuidv4 } from "uuid";
-
 class Category extends BaseEntity {
   constructor(title) {
     super(title);
@@ -18,6 +17,7 @@ categorySettings.activeCategory = {
   title: undefined,
   tasks: undefined,
 };
+
 /* vv-- LocalStorage --vv */
 
 function saveToLocalStorage(item, numberValue) {
@@ -99,6 +99,7 @@ function useFilter(filterName = "nameFilter", isSame) {
   };
   if (typeof filters[filterName] === typeof filters[filterName]) {
     filters[filterName](isSame);
+    addDoneItemsToTheBottom();
     saveToLocalStorage("categoryList");
   } else {
     console.warn("No Such Filter!");
@@ -241,6 +242,12 @@ function isFilterDescending(filterName) {
   return { isDescending: filterObjects[filterName], filterName };
 }
 
+function addDoneItemsToTheBottom() {
+  let doneItems = getActiveTasks().filter((item) => item.isDone);
+  let notDoneItems = getActiveTasks().filter((item) => !item.isDone);
+  getActiveCategory().tasks = notDoneItems.concat(doneItems);
+}
+
 //! ^^--- Filtering ---^^ */
 
 /* VV--- ADD ---VVV */
@@ -317,6 +324,7 @@ function deleteCategory() {
 
 function deleteAllActiveTasks() {
   categorySettings.activeCategory.tasks = [];
+  saveToLocalStorage("categoryList");
 }
 
 function deleteAllCategories() {
@@ -392,4 +400,6 @@ export {
   isFilterDescending,
   getCategoryByHash,
   setActiveCategoryByHash,
+  uuidv4,
+  addDoneItemsToTheBottom,
 };

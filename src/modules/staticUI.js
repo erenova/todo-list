@@ -1,4 +1,3 @@
-import { el } from "date-fns/locale";
 import { updateAssetURLs } from "./assetManagement";
 import {
   deleteAllActiveTasks,
@@ -10,11 +9,11 @@ import {
 import {
   addEditInput,
   addNewInput,
+  clickOnAddNewTask,
   removeFormElement,
   updateUIForCategories,
   updateUIForTasks,
 } from "./dynamicUI";
-
 function resetActiveFilterStatus() {
   document.querySelectorAll(`[data-status]`).forEach((item) => {
     item.dataset.status = "passive";
@@ -55,6 +54,7 @@ function handleClickEventOnFilter(event) {
     useFilter(checkedEvent.getAttribute("data-filterEvent"));
     updateActiveFilterImage(checkedEvent.querySelector("img"));
     setFiltersDOMrequirements();
+    updateUIForTasks();
   }
 }
 
@@ -242,7 +242,12 @@ document
   .querySelector('[data-buttonEvent="deleteActiveCategory"]')
   .addEventListener("click", deleteActiveCategoryDOM);
 
-/* SwitchCategory on click */
+/* add New Category */
+document
+  .querySelectorAll('[data-buttonEvent="ClickOnAddNewTask"]')
+  .forEach((element) => {
+    element.addEventListener("click", clickOnAddNewTask);
+  });
 
 export {
   resetActiveFilterStatus,

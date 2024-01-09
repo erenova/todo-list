@@ -2,12 +2,16 @@ import "./main.css";
 import "./modules/category";
 import "./modules/task";
 import "./modules/dynamicUI";
+import "./modules/keyboardEvents";
 import * as UIelements from "./modules/staticUI";
 import * as categoryModule from "./modules/category";
 import * as taskModule from "./modules/task";
 import backgroundPhoto from "./imgs/todo-background.png";
 import { updateAssetURLs } from "./modules/assetManagement";
-import { updateUIForCategories } from "./modules/dynamicUI";
+import {
+  scrollToActiveCategory,
+  updateUIForCategories,
+} from "./modules/dynamicUI";
 
 document.body.style.backgroundImage = `url(${backgroundPhoto})`;
 function developmentHelper(item, naming) {
@@ -24,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
   UIelements.setFiltersDOMrequirements();
   updateAssetURLs();
   UIelements.updateActiveFilterImageOnLoad();
+  scrollToActiveCategory();
 });
 
 /* Touch zoom in feature disabled */
