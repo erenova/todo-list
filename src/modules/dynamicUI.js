@@ -372,8 +372,6 @@ function setDoneCheckboxStyle() {
         case "LOW":
           getItemParent.classList.remove("bg-green-700");
           break;
-        default:
-          break;
       }
       getItemParent.classList.add("bg-gray-300");
     } else {
