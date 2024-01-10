@@ -110,18 +110,18 @@ function getCheckFilteredTasks() {
   console.log(allItems);
 }
 
-function deleteTaskWithHash(hashID) {
-  getTaskWithHash(hashID);
+function checkEveryTask() {
+  let value = true;
+  if (fetchActiveTaskList()[0].isDone === true) value = false;
+  let allItems = fetchActiveTaskList().forEach((element) => {
+    element.isDone = value;
+  });
 }
 
-function getIndexWithHash(hashID) {
-  let index = 0;
-  const foundTask = fetchActiveTaskList().find((item) => {
-    index++;
-    if (item.uniqueID === hashID) {
-      return index;
-    }
-  });
-  return index - 1;
-}
-export { addNewTask, deleteTask, getTaskWithHash, getCheckFilteredTasks };
+export {
+  addNewTask,
+  deleteTask,
+  getTaskWithHash,
+  getCheckFilteredTasks,
+  checkEveryTask,
+};

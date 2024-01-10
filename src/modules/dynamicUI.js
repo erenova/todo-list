@@ -9,7 +9,12 @@ import {
   setActiveCategoryByHash,
 } from "./category";
 import format from "date-fns/format";
-import { addNewTask, getCheckFilteredTasks, getTaskWithHash } from "./task";
+import {
+  addNewTask,
+  checkEveryTask,
+  getCheckFilteredTasks,
+  getTaskWithHash,
+} from "./task";
 
 function updateUIForTasks() {
   addDoneItemsToTheBottom();
@@ -402,6 +407,18 @@ document
   });
 function deleteCheckedboxes() {
   getCheckFilteredTasks();
+  updateUIForTasks();
+  saveToLocalStorage("categoryList");
+}
+
+document
+  .querySelectorAll('[data-buttonevent="checkEveryBox"]')
+  .forEach((item) => {
+    item.addEventListener("click", checkEveryBox);
+  });
+
+function checkEveryBox() {
+  checkEveryTask();
   updateUIForTasks();
   saveToLocalStorage("categoryList");
 }
