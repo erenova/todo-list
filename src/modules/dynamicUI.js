@@ -9,7 +9,7 @@ import {
   setActiveCategoryByHash,
 } from "./category";
 import format from "date-fns/format";
-import { addNewTask, deleteTask, getTaskWithHash } from "./task";
+import { addNewTask, getCheckFilteredTasks, getTaskWithHash } from "./task";
 
 function updateUIForTasks() {
   addDoneItemsToTheBottom();
@@ -121,18 +121,7 @@ function addNewInput() {
       .querySelector('[data-element="categoryForm"]')
       .addEventListener("submit", (e) => {
         e.preventDefault();
-        const inputElement = document.querySelector(
-          `[data-element="categoryNameInput"]`
-        );
-        if (inputElement.value || inputElement.value !== "") {
-          getActiveCategory().title = inputElement.value;
-          removeFormElement();
-          updateUIForCategories();
-          saveToLocalStorage("categoryList");
-        } else {
-          e.preventDefault();
-          console.warn("Fill the form.");
-        }
+        addNewCategoryItemOnSubmit(e);
       });
 
     inputElement.addEventListener("click", addNewCategoryItemOnSubmit);
@@ -252,7 +241,7 @@ function clickOnAddNewTask() {
   if (inputElement.length === 0) {
     let taskList = document.querySelector("#task-list");
     taskList.innerHTML += `<form data-element="newTaskInput" class="flex flex-col items-center gap-2">
-      <div 
+      <fieldset 
         class="rounded-lg bg-gray-600 text-black min-h-[1rem] max-h-[4rem] pt-1 pb-1 pr-5 grid grid-cols-3 md:grid-cols-4 place-items-center place-content-center border">
         <input placeholder="type the task" data-element="titleSelection" type="text"
         class="w-[85%]">
@@ -272,18 +261,27 @@ function clickOnAddNewTask() {
         </select>
       
         
-      </div>
-      <div class="flex w-full items-center justify-center gap-4">
+      </fieldset>
+      <fieldset class="flex w-full items-center justify-center gap-4">
       <button type="button" data-buttonevent="addTaskToList" class="w-1/4 bg-gray-600 text-white rounded-lg">Add</button>
-      <button type="button" data-buttonevent="deleteNewTaskForm" class="w-1/4 bg-gray-600 text-white rounded-lg">Cancel</button></div>
+      <button type="button" data-buttonevent="deleteNewTaskForm" class="w-1/4 bg-gray-600 text-white rounded-lg">Cancel</button></fieldset>
+      <input type="submit" class="hidden" data-buttonevent="addTaskToList">
     </form>`;
+    inputElement = document.querySelector('[data-element="newTaskInput"]');
+    document
+      .querySelector('[data-element="titleSelection"]')
+      .addEventListener("submit", (e) => {
+        console.log(e);
+        if (e.key === "Enter") addTaskToList();
+      });
     addEventListenerForTaskButton();
     addEventListenerForDeleteNewTask();
     focusInputText();
   }
 }
 
-function addTaskToList() {
+function addTaskToList(e) {
+  e.preventDefault();
   let titleValue = document.querySelector(
     '[data-element="titleSelection"]'
   ).value;
@@ -314,8 +312,10 @@ function addTaskToList() {
 
 function addEventListenerForTaskButton() {
   document
-    .querySelector('[data-buttonevent="addTaskToList"]')
-    .addEventListener("click", addTaskToList);
+    .querySelectorAll('[data-buttonevent="addTaskToList"]')
+    .forEach((item) => {
+      item.addEventListener("click", addTaskToList);
+    });
 }
 
 function addEventListenerForDeleteNewTask() {
@@ -401,13 +401,9 @@ document
     item.addEventListener("click", deleteCheckedboxes);
   });
 function deleteCheckedboxes() {
-  document.querySelectorAll('[type="checkbox"]').forEach((item) => {
-    if (item.checked) {
-      getActiveTasks().splice(getTaskWithHash(item.dataset.elementid), 1);
-      updateUIForTasks();
-      saveToLocalStorage("categoryList");
-    }
-  });
+  getCheckFilteredTasks();
+  updateUIForTasks();
+  saveToLocalStorage("categoryList");
 }
 
 export {

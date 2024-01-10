@@ -93,16 +93,28 @@ function getTaskWithHash(hashID) {
     return item.uniqueID === hashID;
   });
   if (foundTask) {
+    console.log(foundTask);
     return foundTask;
   } else {
     return false;
   }
 }
 
+function getCheckFilteredTasks() {
+  let allItems = fetchActiveTaskList().filter((item) => {
+    if (item.isDone === false) {
+      return item.uniqueID;
+    }
+  });
+  categoryModule.getActiveCategory().tasks = allItems;
+  console.log(allItems);
+}
+
 function deleteTaskWithHash(hashID) {
   getTaskWithHash(hashID);
 }
-function getIndexWithHash(HashID) {
+
+function getIndexWithHash(hashID) {
   let index = 0;
   const foundTask = fetchActiveTaskList().find((item) => {
     index++;
@@ -112,4 +124,4 @@ function getIndexWithHash(HashID) {
   });
   return index - 1;
 }
-export { addNewTask, deleteTask, getTaskWithHash };
+export { addNewTask, deleteTask, getTaskWithHash, getCheckFilteredTasks };
