@@ -247,9 +247,15 @@ function clickOnAddNewTask() {
     let taskList = document.querySelector("#task-list");
     taskList.innerHTML += `<form data-element="newTaskInput" class="flex flex-col items-center gap-2">
       <fieldset 
-        class="rounded-lg bg-gray-600 text-black min-h-[1rem] max-h-[4rem] pt-1 pb-1 pr-5 grid grid-cols-3 md:grid-cols-4 place-items-center place-content-center border">
-        <input placeholder="type the task" data-element="titleSelection" type="text"
-        class="w-[85%]">
+        class="rounded-lg bg-gray-600 text-black min-h-[1rem] max-h-[4rem] pt-1 pb-1 pr-5 grid grid-cols-3  md:grid-cols-4 place-items-center place-content-center border ">
+
+        <select data-element="prioritySelection" class="order-4">
+      <option value="HIGH">HIGH</option>
+      <option value="MED">MED</option>
+      <option value="LOW">LOW</option>
+        </select>
+
+
         <input  placeholder="type the desc" data-element="descriptionSelection"
         class="w-[85%] hidden md:block">
         <input type="date" class="w-[85%]" data-element="dateSelection" value="${format(
@@ -259,12 +265,10 @@ function clickOnAddNewTask() {
       
         
       
-        <select data-element="prioritySelection">
-      <option value="HIGH">HIGH</option>
-      <option value="MED">MED</option>
-      <option value="LOW">LOW</option>
-        </select>
-      
+
+
+        <input placeholder="type the task" data-element="titleSelection" type="text"
+        class="w-[85%] -order-1">
         
       </fieldset>
       <fieldset class="flex w-full items-center justify-center gap-4">
